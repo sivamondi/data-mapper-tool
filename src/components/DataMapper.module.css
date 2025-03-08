@@ -26,7 +26,7 @@
 .sourceContainer {
   flex: 1;
   max-width: 400px;
-  padding: 2rem;
+  padding: 1rem 2rem;
   border-radius: 12px;
   background: linear-gradient(145deg, #2a2a2a, #333);
   color: white;
@@ -44,7 +44,7 @@
 
 .sourceContainer h3 {
   color: #00bcd4;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   font-size: 1.2rem;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -68,21 +68,41 @@
 .fileInputContainer {
   position: relative;
   width: 100%;
-  min-height: 100px;
-  border: 2px dashed #444;
-  border-radius: 8px;
+  min-height: 50px;
+  height: 50px;
+  border: 2px dashed rgba(0, 188, 212, 0.3);
+  border-radius: 12px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 0 1.5rem;
   transition: all 0.3s ease;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 188, 212, 0.02);
+  cursor: pointer;
 }
 
 .fileInputContainer:hover {
   border-color: #00bcd4;
   background: rgba(0, 188, 212, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.1);
+}
+
+.fileInputContainer::before {
+  content: '📄';
+  font-size: 1.4rem;
+  margin-right: 8px;
+  margin-bottom: 0;
+}
+
+.fileInputContainer::after {
+  content: '';
+  white-space: pre;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 8px;
 }
 
 .fileInput {
@@ -96,39 +116,18 @@
   z-index: 2;
 }
 
-.fileInputContainer::before {
-  content: 'Drag & Drop your file here';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #888;
-  font-size: 0.9rem;
-  pointer-events: none;
-  z-index: 1;
-  width: 100%;
-  text-align: center;
-}
-
-.fileInputContainer::after {
-  content: 'or';
-  position: absolute;
-  top: 65%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #666;
-  font-size: 0.8rem;
-  pointer-events: none;
-  z-index: 1;
-}
-
 .fileInputContainer p {
+  position: static;
   color: #00bcd4;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  word-break: break-all;
-  text-align: center;
-  max-width: 100%;
+  font-size: 0.85rem;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: rgba(0, 188, 212, 0.1);
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin: 0;
 }
 
 .generateButton {
@@ -644,14 +643,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .attribute:not(.mapped):hover {
   background: linear-gradient(145deg, #383838, #404040);
   border-color: #00bcd4;
   transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.2);
+  box-shadow: 
+    0 4px 12px rgba(0, 188, 212, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Mapping items styling */
@@ -663,7 +666,10 @@
   align-items: center;
   gap: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-bottom: 0.5rem;
 }
 
 /* Scrollbar styling */
@@ -735,54 +741,192 @@
 .sourceAttributes,
 .mappingArea {
   flex: 1;
-  background-color: #2a2a2a;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #444;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(145deg, #2a2a2a, #323232);
+  border-radius: 16px;
+  padding: 1.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
-  height: 400px; /* Reduced from 600px to 400px */
+  height: 400px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(10px);
 }
 
-/* Update attribute and mapping lists */
+/* Hover effect for boxes */
+.sourceAttributes:hover,
+.mappingArea:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 30px rgba(0, 0, 0, 0.4),
+    inset 0 2px 0 rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 188, 212, 0.3);
+}
+
+/* Headers for each section */
+.sourceAttributes h3,
+.mappingArea h3 {
+  color: #00bcd4;
+  margin-bottom: 1.5rem;
+  padding: 0 0 1rem 2.5rem;
+  border-bottom: 2px solid rgba(0, 188, 212, 0.3);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+/* Icons for headers */
+.sourceAttributes h3::before,
+.mappingArea h3::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+}
+
+/* Specific icon for source attributes */
+.sourceAttributes:first-child h3::before {
+  content: '📤';
+}
+
+/* Specific icon for destination attributes */
+.sourceAttributes:last-child h3::before {
+  content: '📥';
+}
+
+/* Specific icon for suggested mappings */
+.mappingArea h3::before {
+  content: '🔄';
+}
+
+/* List containers */
 .attributeList,
 .mappingList {
   flex: 1;
   overflow-y: auto;
-  padding-right: 0.5rem;
-  margin-right: -0.5rem;
+  padding: 0.5rem;
+  margin: 0 -0.5rem;
   scrollbar-width: thin;
-  scrollbar-color: #00bcd4 #2a2a2a;
+  scrollbar-color: rgba(0, 188, 212, 0.5) rgba(0, 0, 0, 0.2);
 }
 
-/* Update mapped data section */
-.mappedDataSection {
-  flex: 0 0 70%;
-  background-color: #2a2a2a;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #444;
-  height: 400px; /* Fixed height */
-  overflow: hidden;
+/* Scrollbar styling */
+.attributeList::-webkit-scrollbar,
+.mappingList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.attributeList::-webkit-scrollbar-track,
+.mappingList::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.attributeList::-webkit-scrollbar-thumb,
+.mappingList::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00bcd4, #008697);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Attribute items */
+.attribute {
+  background: linear-gradient(145deg, #333, #383838);
+  color: #fff;
+  padding: 1rem 1.2rem;
+  margin: 0.6rem 0;
+  border-radius: 8px;
+  cursor: grab;
+  transition: all 0.2s;
+  user-select: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.95rem;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.attribute:not(.mapped):hover {
+  background: linear-gradient(145deg, #383838, #404040);
+  border-color: #00bcd4;
+  transform: translateX(4px);
+  box-shadow: 
+    0 4px 12px rgba(0, 188, 212, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Mapping items */
+.mappingItem {
+  background: linear-gradient(145deg, #333, #383838);
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-bottom: 0.5rem;
+}
+
+/* Mapping arrow */
+.mappingArrow {
+  color: #00bcd4;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-shadow: 0 0 8px rgba(0, 188, 212, 0.4);
+}
+
+/* Remove button */
+.removeMapping {
+  margin-left: auto;
+  background: rgba(255, 68, 68, 0.1);
+  border: none;
+  color: #ff4444;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.removeMapping:hover {
+  background: rgba(255, 68, 68, 0.2);
+  transform: scale(1.1);
+}
+
+/* Section spacing */
+.mappingSection {
+  gap: 2.5rem;
+  margin: 2.5rem 0;
+  padding: 0 1.5rem;
 }
 
 .jsonDisplay {
-  flex: 1;
-  overflow-y: auto;
   background-color: #1e1e1e;
   padding: 1rem;
   border-radius: 4px;
+  overflow-x: auto;
   font-family: 'Consolas', 'Monaco', monospace;
   white-space: pre-wrap;
   line-height: 1.5;
-  scrollbar-width: thin;
-  scrollbar-color: #00bcd4 #2a2a2a;
 }
+
+/* JSON syntax highlighting colors */
+.jsonDisplay .string { color: #ce9178; }    /* strings - brown/red */
+.jsonDisplay .number { color: #b5cea8; }    /* numbers - light green */
+.jsonDisplay .boolean { color: #569cd6; }   /* booleans - blue */
+.jsonDisplay .null { color: #569cd6; }      /* null - blue */
+.jsonDisplay .key { color: #9cdcfe; }       /* keys - light blue */
 
 /* Add new header styles */
 .header {
