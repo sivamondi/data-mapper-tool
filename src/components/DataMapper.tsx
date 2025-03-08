@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
 import styles from './DataMapper.module.css';
 
 interface Attribute {
@@ -27,6 +26,8 @@ export function DataMapper() {
   const [mappings, setMappings] = useState<Mapping[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mappingGenerated, setMappingGenerated] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   // Mock data for demonstration
   const [source1Attributes, setSource1Attributes] = useState<Attribute[]>([
@@ -53,7 +54,7 @@ export function DataMapper() {
     }
   };
 
-  const handleDragStart = (attribute: string, source: 'source1' | 'source2') => {
+  const handleDragStart = (attribute: string) => {
     setDraggedAttribute(attribute);
   };
 
@@ -117,6 +118,7 @@ export function DataMapper() {
 
     setIsLoading(true);
     setError(null);
+    setIsAnimating(true);
 
     try {
       // Simulate API call with setTimeout
@@ -152,11 +154,13 @@ export function DataMapper() {
       setSource1Attributes(mockResponse.source1Unmapped);
       setSource2Attributes(mockResponse.source2Unmapped);
       setMappings(mockResponse.mappedData);
+      setMappingGenerated(true);
       
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setIsLoading(false);
+      setIsAnimating(false);
     }
   };
 
@@ -198,17 +202,57 @@ export function DataMapper() {
 
   return (
     <div className={styles.container}>
+      {isAnimating && (
+        <div className={styles.botAnimationContainer}>
+          <div className={styles.botAnimation}>
+            <div className={styles.botIcon}>🤖</div>
+            <div className={styles.botTrail}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      )}
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>Data Mapper Tool</h1>
         <nav className={styles.nav}>
-          <Link to="/lineage" className={styles.navLink}>View Data Lineage</Link>
+          {/* Removing the Data Lineage link */}
         </nav>
       </header>
 
       <div className={styles.content}>
+        <div className={styles.promptSection}>
+          <div className={styles.promptContainer}>
+            <label htmlFor="prompt">Prompt</label>
+            <textarea 
+              id="prompt"
+              className={styles.promptTextArea}
+              rows={5}
+              placeholder="Enter your prompt here..."
+            />
+          </div>
+          {mappingGenerated && (
+            <div className={styles.matchStatus}>
+              <div className={styles.matchStatusItem}>
+                <span className={styles.checkIcon}>✓</span>
+                <span>70% matched</span>
+              </div>
+              <div className={styles.matchStatusItem}>
+                <span className={styles.suggestedIcon}>?</span>
+                <span>20% suggested</span>
+              </div>
+              <div className={styles.matchStatusItem}>
+                <span className={styles.unmatchedIcon}>×</span>
+                <span>10% unmatched</span>
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className={styles.uploadSection}>
           <div className={styles.sourceContainer}>
-            <h3>Source (csv)</h3>
+            <h3>Source</h3>
             <div className={styles.fileInputContainer}>
               <input
                 type="file"
@@ -221,7 +265,7 @@ export function DataMapper() {
           </div>
 
           <div className={styles.sourceContainer}>
-            <h3>Destination (csv)</h3>
+            <h3>Destination</h3>
             <div className={styles.fileInputContainer}>
               <input
                 type="file"
@@ -253,7 +297,7 @@ export function DataMapper() {
                   key={attr.id}
                   className={`${styles.attribute} ${attr.mapped ? styles.mapped : ''}`}
                   draggable={!attr.mapped}
-                  onDragStart={() => handleDragStart(attr.name, 'source1')}
+                  onDragStart={() => handleDragStart(attr.name)}
                   onDragOver={e => e.preventDefault()}
                   onDrop={e => {
                     e.preventDefault();
@@ -266,8 +310,30 @@ export function DataMapper() {
             </div>
           </div>
 
+          
+          <div className={styles.sourceAttributes}>
+            <h3>Unmapped Destination Attributes</h3>
+            <div className={styles.attributeList}>
+              {source2Attributes.map(attr => (
+                <div
+                  key={attr.id}
+                  className={`${styles.attribute} ${attr.mapped ? styles.mapped : ''}`}
+                  draggable={!attr.mapped}
+                  onDragStart={() => handleDragStart(attr.name)}
+                  onDragOver={e => e.preventDefault()}
+                  onDrop={e => {
+                    e.preventDefault();
+                    handleDrop(attr.name, 'source2');
+                  }}
+                >
+                  {attr.name}
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className={styles.mappingArea}>
-            <h3>Current Mappings</h3>
+            <h3>Suggested Mappings</h3>
             <div className={styles.mappingList}>
               {mappings.map((mapping, index) => (
                 <div key={index} className={styles.mappingItem}>
@@ -278,29 +344,8 @@ export function DataMapper() {
                     className={styles.removeMapping}
                     onClick={() => handleRemoveMapping(mapping)}
                   >
-                    ×
+                    
                   </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.sourceAttributes}>
-            <h3>Unmapped Destination Attributes</h3>
-            <div className={styles.attributeList}>
-              {source2Attributes.map(attr => (
-                <div
-                  key={attr.id}
-                  className={`${styles.attribute} ${attr.mapped ? styles.mapped : ''}`}
-                  draggable={!attr.mapped}
-                  onDragStart={() => handleDragStart(attr.name, 'source2')}
-                  onDragOver={e => e.preventDefault()}
-                  onDrop={e => {
-                    e.preventDefault();
-                    handleDrop(attr.name, 'source2');
-                  }}
-                >
-                  {attr.name}
                 </div>
               ))}
             </div>
