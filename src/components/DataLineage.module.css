@@ -1,0 +1,44 @@
+.container {
+  padding: 2rem;
+  background-color: #1a1a1a;
+  min-height: 100vh;
+}
+
+.title {
+  color: #00bcd4;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.svg {
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.node circle {
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+.node text {
+  fill: white;
+  font-size: 12px;
+}
+
+.link {
+  stroke: #666;
+  stroke-width: 2px;
+}
+
+.node.source circle {
+  fill: #00bcd4;
+}
+
+.node.destination circle {
+  fill: #28a745;
+}
+
+.node.mapping circle {
+  fill: #007bff;
+} 
