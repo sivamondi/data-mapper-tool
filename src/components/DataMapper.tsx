@@ -121,10 +121,10 @@ export function DataMapper() {
     setIsAnimating(true);
 
     try {
-      // Simulate API call with setTimeout
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // First wait for 5 seconds for the bot animation
+      await new Promise(resolve => setTimeout(resolve, 5000));
 
-      // Generate 100+ mock unmapped attributes
+      // Generate mock data...
       const mockSource1Unmapped = Array.from({ length: 50 }, (_, i) => ({
         id: `s${i + 1}`,
         name: `source_field_${i + 1}`,
@@ -292,7 +292,7 @@ export function DataMapper() {
           <div className={styles.sourceAttributes}>
             <h3>Unmapped Source Attributes</h3>
             <div className={styles.attributeList}>
-              {source1Attributes.map(attr => (
+              {mappingGenerated && source1Attributes.map(attr => (
                 <div
                   key={attr.id}
                   className={`${styles.attribute} ${attr.mapped ? styles.mapped : ''}`}
@@ -310,11 +310,10 @@ export function DataMapper() {
             </div>
           </div>
 
-          
           <div className={styles.sourceAttributes}>
             <h3>Unmapped Destination Attributes</h3>
             <div className={styles.attributeList}>
-              {source2Attributes.map(attr => (
+              {mappingGenerated && source2Attributes.map(attr => (
                 <div
                   key={attr.id}
                   className={`${styles.attribute} ${attr.mapped ? styles.mapped : ''}`}
